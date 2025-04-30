@@ -28,3 +28,16 @@ terraform.rc
 
 # Ignore Mac/OSX system files
 .DS_Store
+
+# CI/CD and security scanning artifacts
+.external_modules/
+*.sarif
+tfplan
+.scannerwork/
+coverage/
+report.xml
+junit.xml
+
+# Local environment files
+.env
+.env.local

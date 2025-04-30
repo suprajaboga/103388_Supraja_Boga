@@ -6,6 +6,9 @@ This repository contains Terraform code to deploy EC2 instances on AWS with best
 
 ```
 .
+├── .github/                # GitHub specific configurations
+│   └── workflows/          # GitHub Actions workflows
+│       └── terraform-cicd.yml # CI/CD pipeline configuration
 ├── environments/           # Environment-specific configurations
 │   ├── dev/                # Development environment
 │   │   ├── main.tf         # Main configuration file
@@ -26,7 +29,10 @@ This repository contains Terraform code to deploy EC2 instances on AWS with best
 │       └── outputs.tf
 ├── terraform/              # Shared Terraform configurations
 │   └── backend.tf          # Backend configuration for state management
+├── .checkov.yaml           # Checkov security scanner configuration
 ├── .gitignore              # Git ignore file
+├── .pre-commit-config.yaml # Pre-commit hooks configuration
+├── .tflint.hcl             # TFLint configuration
 └── README.md               # This file
 ```
 
@@ -37,12 +43,67 @@ This repository contains Terraform code to deploy EC2 instances on AWS with best
 - **Remote State Management**: S3 backend with DynamoDB locking
 - **Security Best Practices**: Encrypted volumes, IAM roles, security groups
 - **Customizable**: Easily configurable through variables
+- **CI/CD Pipeline**: Automated testing, validation, and deployment
+- **Security Scanning**: Integrated security and compliance checks
 
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads.html) (v1.0.0+)
 - [AWS CLI](https://aws.amazon.com/cli/) configured with appropriate credentials
 - S3 bucket and DynamoDB table for remote state (see setup instructions in `terraform/backend.tf`)
+- GitHub repository with appropriate secrets configured for CI/CD
+
+## CI/CD Pipeline
+
+This repository includes a comprehensive CI/CD pipeline using GitHub Actions that performs:
+
+### Security Scanning
+
+- **TFSec**: Scans Terraform code for potential security issues
+- **Checkov**: Performs static code analysis for infrastructure-as-code
+- **TFLint**: Lints Terraform files for best practices and potential errors
+- **CodeQL**: Performs static application security testing
+
+### Terraform Validation
+
+- **Format Check**: Ensures consistent code formatting
+- **Validation**: Verifies that the Terraform code is syntactically correct and internally consistent
+- **Plan**: Generates and displays execution plans for review on pull requests
+- **Apply**: Automatically applies changes when code is merged to the main branch
+
+### Workflow Configuration
+
+The CI/CD pipeline is defined in `.github/workflows/terraform-cicd.yml` and is triggered on:
+- Push to the main branch
+- Pull requests targeting the main branch
+
+### Required GitHub Secrets
+
+To use the CI/CD pipeline, configure the following secrets in your GitHub repository:
+
+- `AWS_ACCESS_KEY_ID`: AWS access key with permissions to deploy resources
+- `AWS_SECRET_ACCESS_KEY`: Corresponding AWS secret key
+- `AWS_REGION`: AWS region for deployment (e.g., us-west-2)
+- `TF_STATE_BUCKET`: S3 bucket name for Terraform state
+- `TF_LOCK_TABLE`: DynamoDB table name for state locking
+
+## Developer Setup
+
+### Pre-commit Hooks
+
+This repository includes pre-commit hooks to ensure code quality before committing:
+
+1. Install pre-commit:
+   ```bash
+   pip install pre-commit
+   ```
+
+2. Set up the hooks:
+   ```bash
+   pre-commit install
+   ```
+
+3. The hooks will now run automatically on `git commit`
 
 ## Usage
 

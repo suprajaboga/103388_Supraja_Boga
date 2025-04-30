@@ -1,0 +1,18 @@
+branch: main
+download-external-modules: true
+evaluate-variables: true
+external-modules-download-path: .external_modules
+framework:
+  - terraform
+  - secrets
+skip-check:
+  # Skip checks that might be too strict for this project
+  # Uncomment and add specific check IDs if needed
+  # - CKV_AWS_1
+  # - CKV_AWS_2
+skip-path:
+  - .github/
+  - .external_modules/
+compact: true
+quiet: false
+soft-fail: false
